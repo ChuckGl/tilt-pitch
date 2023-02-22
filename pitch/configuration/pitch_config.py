@@ -21,7 +21,7 @@ class PitchConfig:
         self.log_file_path = 'pitch_log.json'
         self.log_file_max_mb = 10
         # Prometheus
-        self.prometheus_enabled = True
+        self.prometheus_enabled = False
         self.prometheus_port = 8000
         # InfluxDB
         self.influxdb_hostname = None
@@ -44,6 +44,9 @@ class PitchConfig:
         # Brewersfriend
         self.brewersfriend_api_key = None
         self.brewersfriend_temp_unit = "F"
+        # BierBot
+        self.bierbot_api_key = None
+        self.bierbot_temp_unit = "F"
         # Grainfather
         self.grainfather_custom_stream_urls = None
         self.grainfather_temp_unit = "F"

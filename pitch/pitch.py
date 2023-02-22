@@ -16,7 +16,6 @@ from .rate_limiter import RateLimitedException
 # Statics
 #############################################
 uuid_to_colors = {
-        "a495bb70-c5b1-4b44-b512-1370f02d74de": "yellow",
         "a495bb20-c5b1-4b44-b512-1370f02d74de": "green",
         "a495bb30-c5b1-4b44-b512-1370f02d74de": "black",
         "a495bb10-c5b1-4b44-b512-1370f02d74de": "red",
@@ -40,6 +39,7 @@ normal_providers = [
         InfluxDb2CloudProvider(config),
         BrewfatherCustomStreamCloudProvider(config),
         BrewersFriendCustomStreamCloudProvider(config),
+        BierBotCustomStreamCloudProvider(config),
         GrainfatherCustomStreamCloudProvider(config),
         TaplistIOCloudProvider(config)
     ]
@@ -80,10 +80,10 @@ def _start_scanner(enabled_providers: list, timeout_seconds: int, simulate_beaco
         threading.Thread(name='background', target=_start_beacon_simulation, daemon=True).start()
     else:
         scanner = BeaconScanner(_beacon_callback,packet_filter=IBeaconAdvertisement)
-        scanner.start()
+        scanner.start()    
         signal.signal(signal.SIGTERM, _trigger_graceful_termination)
         print("...started: Tilt scanner")
-
+        
 
     print("Ready!  Listening for beacons")
     start_time = time.time()
@@ -106,18 +106,17 @@ def _start_scanner(enabled_providers: list, timeout_seconds: int, simulate_beaco
             scanner.stop()
         print("...stopped: Tilt Scanner ({})".format(e))
 
-
 def _start_beacon_simulation():
     """Simulates Beacon scanning with fake events. Useful when testing or developing
     without a beacon, or on a platform with no Bluetooth support"""
     print("...started: Tilt Beacon Simulator")
     # Using Namespace to trick a dict into a 'class'
+    fake_packet = argparse.Namespace(**{
+        'uuid': colors_to_uuid['simulated'],
+        'major': random.randrange(65, 75),
+        'minor': random.randrange(1035, 1040)
+    })
     while True:
-        fake_packet = argparse.Namespace(**{
-            'uuid': colors_to_uuid['simulated'],
-            'major': random.randrange(65, 75),
-            'minor': random.randrange(1035, 1040)
-        })
         _beacon_callback(None, None, fake_packet, dict())
         time.sleep(0.25)
 

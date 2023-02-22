@@ -5,6 +5,7 @@ from .influxdb import InfluxDbCloudProvider
 from .influxdb2 import InfluxDb2CloudProvider
 from .brewfather_custom_stream import BrewfatherCustomStreamCloudProvider
 from .brewersfriend_custom_stream import BrewersFriendCustomStreamCloudProvider
+from .bierbot_custom_stream import BierBotCustomStreamCloudProvider
 from .calibration import CalibrationCloudProvider
 from .grainfather_custom_stream import GrainfatherCustomStreamCloudProvider
 from .taplistio_custom_stream import TaplistIOCloudProvider
