@@ -1,8 +1,8 @@
 import argparse
 import signal
 import threading
-import time
 import random
+import time
 import queue
 import logging
 from pyfiglet import Figlet
@@ -16,13 +16,13 @@ from .rate_limiter import RateLimitedException
 # Statics
 #############################################
 uuid_to_colors = {
+        "a495bb10-c5b1-4b44-b512-1370f02d74de": "red",
         "a495bb20-c5b1-4b44-b512-1370f02d74de": "green",
         "a495bb30-c5b1-4b44-b512-1370f02d74de": "black",
-        "a495bb10-c5b1-4b44-b512-1370f02d74de": "red",
-        "a495bb60-c5b1-4b44-b512-1370f02d74de": "blue",
-        "a495bb50-c5b1-4b44-b512-1370f02d74de": "orange",
-        "a495bb70-c5b1-4b44-b512-1370f02d74de": "yellow",
         "a495bb40-c5b1-4b44-b512-1370f02d74de": "purple",
+        "a495bb50-c5b1-4b44-b512-1370f02d74de": "orange",
+        "a495bb60-c5b1-4b44-b512-1370f02d74de": "blue",
+        "a495bb70-c5b1-4b44-b512-1370f02d74de": "yellow",
         "a495bb80-c5b1-4b44-b512-1370f02d74de": "pink",
         "a495bb40-c5b1-4b44-b512-1370f02d74df": "simulated"  # reserved for fake beacons during simulation mode
     }
@@ -37,11 +37,12 @@ normal_providers = [
         FileCloudProvider(config),
         InfluxDbCloudProvider(config),
         InfluxDb2CloudProvider(config),
+        BierBotCustomStreamCloudProvider(config),
         BrewfatherCustomStreamCloudProvider(config),
         BrewersFriendCustomStreamCloudProvider(config),
-        BierBotCustomStreamCloudProvider(config),
         GrainfatherCustomStreamCloudProvider(config),
-        TaplistIOCloudProvider(config)
+        TaplistIOCloudProvider(config),
+        AzureIoTHubCloudProvider(config)
     ]
 
 # Queue for holding incoming scans
