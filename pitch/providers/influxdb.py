@@ -1,3 +1,7 @@
+# InfluxDB Cloud Provider Script
+# Version: 1.0
+# Date: 2024-01-27
+
 from ..models import TiltStatus
 from ..abstractions import CloudProviderBase
 from ..configuration import PitchConfig
@@ -9,7 +13,7 @@ class InfluxDbCloudProvider(implements(CloudProviderBase)):
 
     def __init__(self, config: PitchConfig):
         self.config = config
-        self.str_name = "InfluxDb ({}:{})".format(config.influxdb_hostname,config.influxdb_port)
+        self.str_name = "InfluxDb ({}:{})".format(config.influxdb_hostname, config.influxdb_port)
         self.batch = list()
 
     def __str__(self):
@@ -32,21 +36,23 @@ class InfluxDbCloudProvider(implements(CloudProviderBase)):
         self.batch.clear()
 
     def enabled(self):
-        return (self.config.influxdb_hostname)
+        return bool(self.config.influxdb_hostname)
 
     def get_point(self, tilt_status: TiltStatus):
-        return {
-                    "measurement": "tilt",
-                    "tags": {
-                        "color": tilt_status.color,
-                        "name": tilt_status.name
-                    },
-                    "fields": {
-                        "temp_fahrenheit": tilt_status.temp_fahrenheit,
-                        "temp_celsius": tilt_status.temp_celsius,
-                        "gravity": tilt_status.gravity,
-                        "plato": tilt_status.plato,
-                        "alcohol_by_volume": tilt_status.alcohol_by_volume,
-                        "apparent_attenuation": tilt_status.apparent_attenuation
-                    }
-                }
+        converted_point = {
+            "measurement": "tilt",
+            "tags": {
+                "color": str(tilt_status.color),
+                "name": str(tilt_status.name)
+            },
+            "fields": {
+                "temp_fahrenheit": float(tilt_status.temp_fahrenheit),
+                "temp_celsius": float(tilt_status.temp_celsius),
+                "gravity": float(tilt_status.gravity),
+                "plato": float(tilt_status.plato),
+                "alcohol_by_volume": float(tilt_status.alcohol_by_volume),
+                "apparent_attenuation": float(tilt_status.apparent_attenuation)
+            }
+        }
+        return converted_point
+
